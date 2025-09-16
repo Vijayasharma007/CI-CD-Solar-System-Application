@@ -62,7 +62,7 @@ jobs:
       - name: unit testing
         run: npm test
       - name: archive test result
-        uses: action/upload-artifact@v4
+        uses: action/upload-artifact@v3
         with:
           name: macha-test-result
           path: test-result.xml
