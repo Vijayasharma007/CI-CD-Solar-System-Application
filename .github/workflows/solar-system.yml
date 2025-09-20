@@ -60,10 +60,18 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+
       - name: setup nodejs version - 20
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
+      - name: Cache Primes
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{hashFiles('package-lock.json')}}
+
       - name: install dependencies
         run: npm install
 
@@ -85,15 +93,25 @@ jobs:
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+
       - name: setup node js version - 18
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Cache Primes
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{hashFiles('package-lock.json')}}
+
       - name: install dependencies
         run: npm install
+
       - name: check code coverage
         continue-on-error: true
         run: npm run coverage
+        
       - name: archive test result
         uses: actions/upload-artifact@v4
         with:
