@@ -171,4 +171,4 @@ jobs:
           context:
           push: true
           tags: |
-            ghcr.io/${{github.repository_owner}}/solar-system      
+            ghcr.io/vijayasharma582/solar-system      
