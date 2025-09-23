@@ -49,6 +49,15 @@ env:
 jobs:
   unit-testing:
     name: unit testing
+    services:
+      mongo-db:
+        image: siddarth67/mongo-db:non-prod
+        ports:
+          - 27017:27017
+    env:
+      MONGO_URI: 'mongodb://localhost:27017/superData'
+      MONGO_USERNAME: superuser
+      MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
     strategy:
           matrix:
             nodejs_version: [18,20]
@@ -128,18 +137,19 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v4
       
-      # - name: dockerhub login
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ vars.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_PASSWORD}}
-
-      - name: GHCR Login
-        uses: docker/login-action@v2.2.0
+      - name: dockerhub login
+        uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{secrets.USER_TOKEN}}
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD}}
+
+      # - name: GHCR Login
+      #   uses: docker/login-action@v2.2.0
+      #   with:
+      #     registry: ghcr.io
+          
+      #     username: ${{ github.repository_owner }}
+      #     password: ${{secrets.USER_TOKEN}}
 
       - name: Docker Build
         uses: docker/build-push-action@v6
@@ -165,10 +175,10 @@ jobs:
       #     push: true
       #     tags: vijayasharma582/solar-system
       
-      - name: container registry push
-        uses: docker/build-push-action@v6
-        with:
-          context:
-          push: true
-          tags: |
-            ghcr.io/vijayasharma582/solar-system      
+      # - name: container registry push
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context:
+      #     push: true
+      #     tags: |
+      #       ghcr.io/vijayasharma582/solar-system      
