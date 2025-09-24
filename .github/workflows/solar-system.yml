@@ -128,6 +128,7 @@ jobs:
           path: coverage
           
   docker:
+
     name: containerization
     needs: [ unit-testing,code-coverage ]
     permissions:
@@ -182,3 +183,25 @@ jobs:
       #     push: true
       #     tags: |
       #       ghcr.io/vijayasharma582/solar-system      
+
+
+
+  dev-deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: install kubectl 
+        uses: azure/setup-kubectl@v4
+        with: 
+          version: "v1.33.5"
+
+      - name: fetch kubernetes cluster details
+        run: |
+          kubectl version --short
+          echo ---------------------------------------------------
+          kubectl get nodes
+
+      
